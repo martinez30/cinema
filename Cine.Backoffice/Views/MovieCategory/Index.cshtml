@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Application.Models.MovieCategory.MovieCategoryModel>
+@{
+    ViewData["Title"] = "Categorias de filmes";
+}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="col-md-10 ">
+            <div class="card">
+                <div class="card-header card-header-info">
+                    <h4 class="card-title ">Categorias de Filmes</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto"></div>
+                        <table class="table col-md-12">
+                            <thead>
+                            <th style="width:85%">
+                                <h4 class="text-info">Name</h4>
+                            </th>
+                            <th style="width:15%"></th>
+                            </thead>
+                    </div>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td><h4>@item.Description</h4></td>
+                                    <td>
+                                        <div class="row ">
+                                            <a class="nav-link col-md-3 " asp-action="Edit" asp-route-id="@item.Id " title="Editar">
+                                                <i class="material-icons">create</i>
+                                            </a>
+                                            <a class="nav-link col-md-3 " asp-action="Delete" asp-route-id="@item.Id " title="Remover">
+                                                <i class="material-icons">delete</i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="2"> Nenhum dado encontrado </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Link
+{
+    <a asp-action="Register" asp-controller="MovieCategory" title="Cadastrar">
+        <i class="material-icons">playlist_add</i>
+
+    </a>
+}

@@ -1,0 +1,40 @@
+﻿@model Application.Models.SessionBuyTicketModel
+@{
+    ViewData["Title"] = "Comprar ingresso";
+}
+
+<form asp-action="BuyTicket" autocomplete="off" method="post">
+    <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group col-md-6">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="MovieName" />
+            <input type="hidden" asp-for="Date" />
+            <label asp-for="MovieName" class="control-label"> Filme</label>
+            <span class="form-control">@Model.MovieName</span>
+        </div>
+        <div class="form-group col-md-6">
+            <label asp-for="Date" class="control-label"> Qual a data e hora da sessão</label>
+            <span class="form-control">@Model.Date</span>
+        </div>
+    </div>
+    <h3 class="form-control"><b>Poltronas Disponíveis</b></h3>
+    <div class="row">
+        @for (int i = 0; i < Model.Seats.Count; i++)
+        {
+        <div class="col-md-1">
+            <label class="form-control text-center">@Model.Seats[i].Description</label>
+            <input type="hidden" asp-for="@Model.Seats[i].Id"/>
+            <input type="hidden" asp-for="@Model.Seats[i].Description"/>
+            <label class="switch">
+                <input type="checkbox" asp-for="@Model.Seats[i].Selected"/>
+                <span class="slider round"></span>
+            </label>
+        </div>
+        }
+    </div>
+    <div class="form-group ">
+        <input type="submit" value="Avançar" class="btn btn-info" />
+        <a asp-action="SessionList" asp-controller="Order" class="btn btn-secondary">Voltar</a>
+    </div>
+</form>

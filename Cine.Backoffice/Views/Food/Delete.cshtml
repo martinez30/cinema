@@ -1,0 +1,45 @@
+﻿@model Application.Models.FoodModel
+@{
+    ViewData["Title"] = "Deletar produto Bomboniere";
+}
+
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <i class="material-icons">close</i>
+    </button>
+    <span>
+        Deseja realmente deletar esse produto?
+    </span>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete" autocomplete="off" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Id" />
+                <label asp-for="Name" class="control-label"> Título</label>
+                <span class="form-control">@Model.Name</span>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"> Duração </label>
+                <span class="form-control">@Model.Description</span>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"> Categoria </label>
+                <span class="form-control">@Model.CategoryName</span>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Amount" class="control-label"> Categoria </label>
+                <span class="form-control">@Model.Amount</span>
+                <span asp-validation-for="Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sim" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary">Nao</a>
+            </div>
+        </form>
+    </div>
+</div>

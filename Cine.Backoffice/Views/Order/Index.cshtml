@@ -1,0 +1,108 @@
+﻿@model Application.Models.SessionListModel
+@{
+    ViewData["Title"] = "Sessões";
+}
+<form asp-action="Index" id="form" method="get" autocomplete="off">
+    <div class="row">
+        <div class="form-group col-md-5">
+            <input type="hidden" asp-for="IsSearch" value="true" />
+            <label asp-for="MovieName" class="control-label">Filme</label>
+            <input type="text" asp-for="MovieName" class="form-control" />
+            <span asp-validation-for="MovieName" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-5">
+            <label asp-for="Date" class="control-label">Data Sessão</label>
+            <input type="datetime" asp-for="Date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="form-group col-md-1">
+            <a class="btn btn-info" id="btn-search">
+                <i class="material-icons ">search</i>
+            </a>
+        </div>
+    </div>
+</form>
+<div class="content">
+    <div class="container-fluid">
+        <div class="col-md-10 ">
+            <div class="card">
+                <div class="card-header card-header-info">
+                    <h4 class="card-title ">Sessões</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto"></div>
+                        <table class="table col-md-12">
+                            <thead>
+                            <th style="width:30%">
+                                <h4 class="text-info">Filme</h4>
+                            </th>
+                            <th style="width:25%">
+                                <h4 class="text-info">Horário da Sessão</h4>
+                            </th>
+                            <th style="width:10%">
+                                <h4 class="text-info">Sala</h4>
+                            </th>
+                            <th style="width:25%">
+                                <h4 class="text-info">Poltronas Disponíveis</h4>
+                            </th>
+                            <th style="width:10%"></th>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Sessions != null && Model.Sessions.Any())
+                                {
+                                    @foreach (var item in Model.Sessions)
+                                    {
+                                        <tr>
+                                            <td><h4>@item.MovieName</h4></td>
+                                            <td><h4>@item.Date.ToString("dd/MM/yyyy HH:mm")</h4></td>
+                                            <td><h4>@item.RoomName</h4></td>
+                                            <td><h4>@item.AvaliableSeatCount</h4></td>
+                                            @if (item.AvaliableSeatCount > 0)
+                                            {
+                                                <td>
+                                                    <div class="row ">
+                                                        <a class="nav-link col-md-3 " asp-action="BuyTicket" asp-route-id="@item.Id " title="Comprar Ingresso">
+                                                            <i class="material-icons">shopping_cart</i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <div class="row ">
+                                                        <span>Esgotada</span>
+                                                    </div>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5"> Nenhum dado encontrado </td>
+
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $("#btn-search").on("click", function () {
+                $("#form").submit();
+            })
+        })
+    </script>
+}

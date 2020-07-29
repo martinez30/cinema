@@ -1,0 +1,30 @@
+﻿@model Application.Models.FoodCategoryModel
+
+@{
+    ViewData["Title"] = "Deletar categoria de Bombonieres";
+}
+
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <i class="material-icons">close</i>
+    </button>
+    <span>
+        Deseja realmente deletar essa categoria?
+    </span>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete" autocomplete="off" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"> Tipo de categoria</label>
+                <span class="form-control">@Model.Name</span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sim" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary">Nao</a>
+            </div>
+        </form>
+    </div>
+</div>

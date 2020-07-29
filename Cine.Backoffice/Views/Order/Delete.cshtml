@@ -1,0 +1,49 @@
+﻿@model Application.Models.CheckoutModel
+@{
+    ViewData["Title"] = $"Cancelar pedido {Model.Order.IdString}";
+}
+
+<div class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <i class="material-icons">close</i>
+    </button>
+    <span>
+        Deseja realmente deletar essa sessão?
+    </span>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Delete" autocomplete="off" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Id" />
+                <label asp-for="Order.OrderItems" class="control-label"> Filme</label>
+                <span class="form-control">@Model</span>
+                <span asp-validation-for="Order.OrderItems" class="text-danger"></span>
+                <label asp-for="Order" class="control-label"> Sessão</label>
+                <span class="form-control">@Model.Order.ClientName</span>
+                <span asp-validation-for="Order" class="text-danger"></span>
+                @*@foreach (var item in Model.OrderItems)
+                {
+                    if (item != null)
+                    {
+                        <label asp-for="OrderItems" class="control-label"> Poltrona</label>
+                        <span class="form-control">@item.Description2</span>
+                    }
+                    else
+                    {
+                        <label asp-for="OrderItems" class="control-label"> Produto</label>
+                        <span class="form-control">@item.ProductName @item.Description1 @item.Description2</span>
+                    }
+                    <span asp-validation-for="OrderItems" class="text-danger"></span>
+                }*@
+
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" value="Sim" class="btn btn-danger" />
+                <a asp-action="Index" class="btn btn-secondary">Nao</a>
+            </div>
+        </form>
+    </div>
+</div>

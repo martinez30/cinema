@@ -1,0 +1,151 @@
+﻿@model Application.Models.CheckoutModel
+@{
+    ViewData["Title"] = $"Pedido {Model.Order.IdString}";
+}
+<div class="row">
+    <div class="col-md-7">
+        <div class="row">
+            <div class="col-md-12">
+
+                <form asp-action="Checkout" id="form" method="get" autocomplete="off">
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            <input type="hidden" asp-for="Id" />
+                            <label asp-for="ProductName" class="control-label">Produto</label>
+                            <input type="text" asp-for="ProductName" class="form-control" />
+                            <span asp-validation-for="ProductName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <a class="btn btn-info" id="btn-search">
+                                <i class="material-icons ">search</i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table col-md-12">
+                <thead>
+                <th style="width:75%">
+                    <h4 class="text-info">Produto</h4>
+                </th>
+                <th style="width:15%">
+                    <h4 class="text-info">Valor</h4>
+                </th>
+                <th style="width:10%"></th>
+                </thead>
+                <tbody>
+                    @if (Model.Foods.Any())
+                    {
+                        @foreach (var item in Model.Foods.OrderBy(x => x.Name))
+                        {
+                            <tr>
+                                <td>
+                                    <h4>@item.Name @item.Description</h4>
+                                </td>
+                                <td>
+                                    <h4>@item.Amount</h4>
+                                </td>
+                                <td>
+                                    <div class="row ">
+                                        <a class="nav-link col-md-3 " asp-action="CheckoutAddNewItem" asp-route-id="@Model.Id" asp-route-foodId="@item.Id" title="Comprar">
+                                            <i class="material-icons">showadd</i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3"> Nenhum dado encontrado </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-md-5">
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="col-md-12 ">
+                    <div class="card">
+                        <div class="card-header card-header-info">
+                            <h4 class="card-title ">Itens</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="col-md-12">
+                                        <thead>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Order.OrderItems)
+                                            {
+                                                <tr class="border-bottom">
+                                                    <td>
+                                                        <h4>@item.Quantity x @item.ProductName</h4>
+                                                        @if (!string.IsNullOrEmpty(item.Description1))
+                                                        {
+                                                            <h4>@item.Description1</h4>
+                                                            <h4>Sala @item.Description2</h4>
+                                                        }
+                                                    </td>
+                                                    <td>@item.TotalAmount</td>
+
+                                                    @if (item.AllowedDelete)
+                                                    {
+                                                        <td>
+                                                            <div class="row ">
+                                                                <a class="nav-link col-md-3 " asp-action="CheckoutDeleteItem" asp-route-id="@item.Id" asp-route-orderId="@Model.Id" title="Deletar">
+                                                                    <i class="material-icons">clear</i>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td></td>
+                                                    }
+                                                </tr>
+                                            }
+                                            <tr>
+                                                <td>
+                                                    <h4><b>Total </b></h4>
+                                                </td>
+                                                <td>
+                                                    <h4><b>@Model.Order.TotalAmount</b></h4>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $("#btn-search").on("click", function () {
+                $("#form").submit();
+            })
+        })
+    </script>
+}
