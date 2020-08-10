@@ -25,7 +25,6 @@ namespace Application.Models
         public string StatusName { get; set; }
 
 
-
         public OrderModel()
         {
         }

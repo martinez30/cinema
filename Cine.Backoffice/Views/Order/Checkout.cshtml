@@ -42,7 +42,7 @@
                         {
                             <tr>
                                 <td>
-                                    <h4>@item.Name @item.Description</h4>
+                                    <h4>@item.Name</h4>
                                 </td>
                                 <td>
                                     <h4>@item.Amount</h4>
@@ -89,13 +89,26 @@
                                         <tbody>
                                             @foreach (var item in Model.Order.OrderItems)
                                             {
+                                                if (item.Room != null)
+                                                {
+                                                    <h5>@item.Name</h5>
+                                                    <small>Sala @item.Room</small>
+                                                    <hr>
+                                                    break;
+                                                }
+                                            }
+                                            @foreach (var item in Model.Order.OrderItems)
+                                            {
                                                 <tr class="border-bottom">
                                                     <td>
-                                                        <h4>@item.Quantity x @item.ProductName</h4>
-                                                        @if (!string.IsNullOrEmpty(item.Description1))
+                                                        @if (!string.IsNullOrEmpty(item.Room))
                                                         {
-                                                            <h4>@item.Description1</h4>
-                                                            <h4>Sala @item.Description2</h4>
+                                                            <h6>@item.Quantity x Ingresso</h6>
+                                                            <h6>Poltrona @item.Seat</h6>
+                                                        }
+                                                        else
+                                                        {
+                                                    <h6>@item.Quantity x @item.Name</h6>
                                                         }
                                                     </td>
                                                     <td>@item.TotalAmount</td>
@@ -105,7 +118,7 @@
                                                         <td>
                                                             <div class="row ">
                                                                 <a class="nav-link col-md-3 " asp-action="CheckoutDeleteItem" asp-route-id="@item.Id" asp-route-orderId="@Model.Id" title="Deletar">
-                                                                    <i class="material-icons">clear</i>
+                                                                    <i class="material-icons">delete</i>
                                                                 </a>
                                                             </div>
                                                         </td>
@@ -116,20 +129,25 @@
                                                     }
                                                 </tr>
                                             }
-                                            <tr>
-                                                <td>
-                                                    <h4><b>Total </b></h4>
-                                                </td>
-                                                <td>
-                                                    <h4><b>@Model.Order.TotalAmount</b></h4>
-                                                </td>
-                                                <td></td>
-                                            </tr>
+                                        <tr>
+                                            <td>
+                                                <h4><b>Total </b></h4>
+                                            </td>
+                                            <td>
+                                                <h4><b>@Model.Order.TotalAmount</b></h4>
+                                            </td>
+                                            <td></td>
+                                        </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12">
+                        <a class="col-md-5 btn btn-success" asp-action="Finalization" asp-route-id="@Model.Id">Finalizar</a>
+                        <span class="col-md-1"></span>
+                        <a class="col-md-5 btn btn-warning" asp-action="Delete">Cancelar</a>
                     </div>
                 </div>
             </div>

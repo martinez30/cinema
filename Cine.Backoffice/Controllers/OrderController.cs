@@ -74,7 +74,7 @@ namespace Cine.Backoffice.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(model);
+                    return View();
                 }
                 var orderid = await _appOrder.Create(model);
                 return RedirectToAction("Checkout", "Order", new { id = orderid });
@@ -92,12 +92,11 @@ namespace Cine.Backoffice.Controllers
 
             return View(model);
         }
-        [HttpPost]
-        public async Task<IActionResult> Checkout(CheckoutModel model)
+        public async Task<IActionResult> Finalization(int id)
         {
-            await _appOrder.FinalizeOrder(model);
-
-            return View(model);
+            await _appOrder.FinalizeOrder(id);
+            var order = await _appOrder.GetAsync(id);
+            return View(order);
         }
         public async Task<IActionResult> CheckoutAddNewItem(int id, int foodId)
         {
@@ -112,16 +111,11 @@ namespace Cine.Backoffice.Controllers
 
             return RedirectToAction("Checkout", "Order", new { id = orderId, productName = string.Empty });
         }
-        public async Task<IActionResult> Delete(int id)
-        {
-            var model = await _appOrder.GetCheckoutAsync(id);
-
-            return View( model);  
-        }
         [HttpPost]
-        public async Task<IActionResult> Delete(CheckoutModel model)
+        //public async Task<IActionResult> Delete(CheckoutModel model)
+        public IActionResult Delete(CheckoutModel model)
         {
-            await _appOrder.Delete(model.Order);        
+            //await _appOrder.Delete(model.Order);        
             return RedirectToAction("Index","Order",null);
         }
         private async Task LoadData()
@@ -130,118 +124,7 @@ namespace Cine.Backoffice.Controllers
 
             var selectliststatus = new SelectList(statusList.Select(x => new { Id = (int)x, Description = x.GetDescription() }), "Id", "Description");
 
-
             ViewBag.StatusSelectList = selectliststatus;
         }
-
-        //        public async Task<IActionResult> Register()
-        //        {
-        //            await LoadData();
-        //            if (TempData["Success"] as bool? ?? false)
-        //            {
-        //                ViewBag.Success = true;
-        //                ViewBag.Message = TempData["Message"];
-        //            }
-        //            return View();
-        //        }
-        //        [HttpPost]
-        //        public async Task<IActionResult> Register(SessionModel model)
-        //        {
-        //            await LoadData();
-        //            if(!ModelState.IsValid)
-        //            {
-        //                return View(model);
-        //            }
-        //            try
-        //            {
-        //                await _appSession.RegisterAsync(model);
-        //                TempData["Success"] = true;
-        //                TempData["Message"] = "Sessão Cadastrada com sucesso";
-        //                return RedirectToAction("Register");
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                ViewBag.Success = false;
-        //                ViewBag.Message = e.Message;
-        //                return View(model);
-        //            }
-        //        }
-
-        //        public async Task<IActionResult> Edit(int id)
-        //        {
-        //            await LoadData();
-        //            if (TempData["Success"] as bool? ?? false)
-        //            {
-        //                ViewBag.Success = true;
-        //                ViewBag.Message = TempData["Message"];
-        //            }
-        //            try
-        //            {
-        //                var model = await _appSession.GetAsync(id);
-        //                return View(model);
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                ViewBag.Success = false;
-        //                ViewBag.Message = e.Message;
-        //                return RedirectToAction("Index");
-        //            }
-        //        }
-        //        [HttpPost]
-        //        public async Task<IActionResult> Edit(SessionModel model)
-        //        {
-        //            await LoadData();
-        //            try
-        //            {
-        //                await _appSession.EditAsync(model);
-        //                ViewBag.Success = true;
-        //                ViewBag.Message = "Sessão editada com sucesso";
-        //                return View(model);
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                ViewBag.Success = false;
-        //                ViewBag.Message = e.Message;
-        //                return View(model);
-        //            }
-        //        }
-
-        //        public async Task<IActionResult> Delete(int id)
-        //        {
-        //            if (TempData["Success"] as bool? ?? false)
-        //            {
-        //                ViewBag.Success = true;
-        //                ViewBag.Message = TempData["Message"];
-        //            }
-        //            try
-        //            {
-        //                var model = await _appSession.GetAsync(id);
-        //                return View(model);
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                ViewBag.Success = false;
-        //                ViewBag.Message = e.Message;
-        //                return RedirectToAction("Index");
-        //            }
-        //        }
-        //        [HttpPost]
-        //        public async Task<IActionResult> Delete(SessionModel model)
-        //        {
-        //            try
-        //            {
-        //                await _appSession.DeleteAsync(model);
-        //                TempData["Success"] = true;
-        //                TempData["Message"] = "Sessão deletada com sucesso";
-        //                return RedirectToAction("Index");
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                ViewBag.Success = false;
-        //                ViewBag.Message = e.Message;
-        //                return View(model);
-        //            }
-        //        }
-
     }
 }

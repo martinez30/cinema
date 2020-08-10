@@ -23,7 +23,7 @@ namespace Application
         {
             if (!model.Seats.Any(x => x.Selected))
             {
-                throw new Exception("Selecione pelo menos 1 poltronas");
+                throw new Exception("Selecione pelo menos 1 poltrona");
             }
             try
             {
@@ -43,7 +43,7 @@ namespace Application
                 {
 
                     var ticket = new Ticket(session, item);
-                    var orderitem = new OrderItem(order, ticket, 1, null, ticket.Amount);
+                    var orderitem = new OrderItem(order, ticket, 1, null, 20);
                     order.OrderItems.Add(orderitem);
                 }
                 order.Calculate();
@@ -149,14 +149,15 @@ namespace Application
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
         }
-        public async Task FinalizeOrder(CheckoutModel model)
+        public async Task<OrderModel> FinalizeOrder(int id)
         {
-            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == model.Order.Id);
+            var order = await _context.Orders.FirstOrDefaultAsync(x => x.Id == id);
 
             order.Status = OrderStatus.Closed;
 
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();
+            return new OrderModel(order);
         }
         public async Task Delete(OrderModel model)
         {
