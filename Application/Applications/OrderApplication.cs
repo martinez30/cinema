@@ -56,7 +56,7 @@ namespace Application
                 throw new Exception("Não foi possível realizar a operação. Tente novamente");
             }
         }
-        public async Task<IEnumerable<OrderModel>> ListAsync(OrderStatus? status, DateTime? date)
+        public async Task<IEnumerable<OrderModel>> ListModelAsync(OrderStatus? status, DateTime? date)
         {
             var query = _context.Orders
                 .Include(x => x.OrderItems)
@@ -76,6 +76,26 @@ namespace Application
             var orders = await query
                 .ToListAsync();
             return orders.Select(x => new OrderModel(x)).OrderBy(x => x.OrderDate.Date);
+        }
+        public async Task<IEnumerable<Order>> ListAsync(DateTime? date)
+        {
+            var query = _context.Orders
+                .Include(x => x.OrderItems)
+                    .ThenInclude(x => x.Product)
+                .Include(x => x.Client)
+                .AsQueryable();
+
+
+                query = query.Where(x => x.Status == OrderStatus.Closed);
+
+            if (date.HasValue)
+            {
+                query = query.Where(x => x.OrderDate.Date == date.Value.Date);
+                return await query.ToListAsync();
+
+            }
+            query = query.Where(x => x.OrderDate.Date > DateTime.Now);
+            return await query.ToListAsync();
         }
         public async Task<OrderModel> GetAsync(int id)
         {

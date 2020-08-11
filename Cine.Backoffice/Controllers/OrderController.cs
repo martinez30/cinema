@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Application;
 using Application.Models;
@@ -57,7 +58,7 @@ namespace Cine.Backoffice.Controllers
                 return View(model);
             }
 
-            var orderList = await _appOrder.ListAsync(model.Status, model.OrderDate);
+            var orderList = await _appOrder.ListModelAsync(model.Status, model.OrderDate);
             model.Orders = orderList.ToList();
             return View(model);
         }
@@ -118,6 +119,25 @@ namespace Cine.Backoffice.Controllers
             //await _appOrder.Delete(model.Order);        
             return RedirectToAction("Index","Order",null);
         }
+        public async Task<IActionResult> OrderListFinished(OrderListModel model)
+        { 
+            if (TempData["Success"] as bool? ?? false)
+            {
+                ViewBag.Success = TempData["Success"];
+                ViewBag.Message = TempData["Message"];
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            OrderListModel orderList;
+            var orders = await _appOrder.ListAsync(model.OrderDate);
+            orderList = new OrderListModel(orders);
+            return View(orderList);
+        }
+
         private async Task LoadData()
         {
             var statusList = Enum.GetValues(typeof(OrderStatus)).Cast<OrderStatus>();
