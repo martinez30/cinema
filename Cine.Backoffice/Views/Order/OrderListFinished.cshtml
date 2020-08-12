@@ -6,10 +6,10 @@
 <div>
     <form asp-action="OrderListFinished" id="form" method="get" autocomplete="off">
         <div class="row">
-            <div class="form-group col-md-5">
+            <div class="form-group col-md-7">
                 <input type="hidden" asp-for="IsSearch" value="true" />
                 <label asp-for="OrderDate" class="control-label">Data</label>
-                <input type="date" id="data" placeholder="mm/dd/yyyy" asp-for="OrderDate" class="form-control"/>
+                <input type="date" id="data" asp-for="OrderDate" class="form-control" />
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
             </div>
             <div class="form-group col-md-1">
@@ -25,6 +25,19 @@
     <div class="content">
         <div class="container-fluid">
             <div class="col-md-10 ">
+                <div class="row" style="margin-right: -50%">
+                    <div style="width: 60%"></div>
+                    <div style="margin: 0; width: 40%">
+                        <div class="row ">
+                            <div>
+                                <h3 class="text-info">Total</h3>
+                                <h5 class="text-light">
+                                    @Model.TotalAmount
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card">
                     <div class="card-header card-header-info">
                         <h4 class="card-title ">Pedidos</h4>
@@ -37,11 +50,14 @@
                                 <th style="width:15%">
                                     <h4 class="text-info">Numero do Pedido</h4>
                                 </th>
-                                <th style="width:20%">
+                                <th style="width:25%">
                                     <h4 class="text-info">Data</h4>
                                 </th>
-                                <th style="width:25%">
+                                <th style="width:20%">
                                     <h4 class="text-info">Quantidade de produtos</h4>
+                                </th>
+                                <th style="width:15%">
+                                    <h4 class="text-info">Total R$</h4>
                                 </th>
                                 <th style="width:20%"></th>
                                 </thead>
@@ -51,13 +67,15 @@
                                         @foreach (var item in Model.Orders)
                                         {
                                             <tr>
-                                                <td><h4>@item.IdString</h4></td>
-                                                <td><h4>@item.OrderDateString</h4></td>
-                                                <td><h4>@item.OrderItems.Count()</h4></td>
+                                                <td><h5>@item.IdString</h5></td>
+                                                <td><h5>@item.OrderDateString</h5></td>
+                                                <td><h5>@item.OrderItems.Count()</h5></td>
+                                                <td><h5 id="value">@item.TotalAmount</h5></td>
+
                                                 <td>
                                                     <div class="row justify-content-end ">
-                                                        <a class="nav-link col-md-3 " asp-action="Checkout" asp-route-id="@item.Id " title="Finalizar pedido">
-                                                            <i class="material-icons">done</i>
+                                                        <a class="nav-link col-md-3 " asp-action="Checkout" asp-route-id="@item.Id " title="Detalhes">
+                                                            <i class="material-icons">edit</i>
                                                         </a>
                                                         <a class="nav-link col-md-3 " asp-action="Delete" asp-route-id="@item.Id " title="Cancelamnto de pedido">
                                                             <i class="material-icons">delete</i>
@@ -80,6 +98,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -91,9 +110,11 @@
     <script type="text/javascript">
 
         $(function () {
+            var total = 0;
             $(".btn-info").on("click", function () {
                 $("#form").submit();
-            })
+            });
         })
+
     </script>
 }

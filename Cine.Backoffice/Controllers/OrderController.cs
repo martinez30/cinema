@@ -135,6 +135,11 @@ namespace Cine.Backoffice.Controllers
             OrderListModel orderList;
             var orders = await _appOrder.ListAsync(model.OrderDate);
             orderList = new OrderListModel(orders);
+            orderList.TotalAmount = 0;
+            foreach (var item in orders)
+            {
+                orderList.TotalAmount += item.TotalAmount;
+            }
             return View(orderList);
         }
 

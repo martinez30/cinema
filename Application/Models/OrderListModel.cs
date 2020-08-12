@@ -14,6 +14,7 @@ namespace Application.Models
         public string StatusName { get; set; }
         public IEnumerable<OrderModel> Orders { get; set; }
         public bool IsSearch { get; set; }
+        public decimal? TotalAmount { get; set; }
 
         public OrderListModel()
         {
