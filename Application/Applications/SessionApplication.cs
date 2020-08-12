@@ -51,17 +51,15 @@ namespace Application
                     .ThenInclude(x => x.Seats)
                .FirstOrDefaultAsync(x => x.Id == sessionid);
 
-            var tickets = await _context.Tickets.Include(x => x.Seat).Where(x => x.Session.Id == sessionid).ToListAsync();
+            var tickets = await _context.Tickets
+                .Include(x => x.Seat)
+                .Where(x => x.Session.Id == sessionid).ToListAsync();
 
             var model = new List<SeatModel>();
 
             foreach (var item in session.Room.Seats)
             {
-                if (!tickets.Select(x => x.Seat.Id).Contains(item.Id))
-                {
                     model.Add(new SeatModel(item));
-                }
-
             }
             return model;
 
@@ -152,20 +150,19 @@ namespace Application
             var session = await _context.Sessions
                .Include(x => x.Movie)
                .Include(x => x.Room)
-                    .ThenInclude(x => x.Seats)
+                    .ThenInclude(x => x.Seats)                    
                .FirstOrDefaultAsync(x => x.Id == id);
 
-            var tickets = await _context.Tickets.Include(x => x.Seat).Where(x => x.Session.Id == id).ToListAsync();
+            var tickets = await _context.Tickets
+                .Include(x => x.Seat)
+                .Where(x => x.Session.Id == id)
+                .ToListAsync();
 
             var seats = new List<Seat>();
 
             foreach (var item in session.Room.Seats)
             {
-                if (!tickets.Select(x => x.Seat.Id).Contains(item.Id))
-                {
-                    seats.Add(item);
-                }
-
+                seats.Add(item);
             }
             return new SessionBuyTicketModel(session, seats);
         }

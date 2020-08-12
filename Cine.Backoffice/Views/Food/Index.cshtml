@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Application.Models.FoodModel>
 @{
-    ViewData["Title"] = "Sessões";
+    ViewData["Title"] = "Cadastro de alimentos";
 }
 
 <div class="content">
@@ -8,7 +8,7 @@
         <div class="col-md-10 ">
             <div class="card">
                 <div class="card-header card-header-info">
-                    <h4 class="card-title ">Sessões</h4>
+                    <h4 class="card-title ">Cadastro de alimentos</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -17,12 +17,6 @@
                             <thead>
                             <th style="width:20%">
                                 <h4 class="text-info">Produto</h4>
-                            </th>
-                            <th style="width:20%">
-                                <h4 class="text-info">Tamanho</h4>
-                            </th>
-                            <th style="width:20%">
-                                <h4 class="text-info">Categoria</h4>
                             </th>
                             <th style="width:20%">
                                 <h4 class="text-info">Tipo</h4>
@@ -39,8 +33,6 @@
                                     {
                                         <tr>
                                             <td><h4>@item.Name</h4></td>
-                                            <td><h4>@item.Description</h4></td>
-                                            <td><h4>@item.ProductCategoryName</h4></td>
                                             <td><h4>@item.CategoryName</h4></td>
                                             <td><h4>@item.Amount</h4></td>
                                             <td>
@@ -75,9 +67,6 @@
 @section Link
 {
     <a asp-action="Register" asp-controller="Food" title="Cadastrar">
-        <i class="material-icons">add</i>
-    </a>
-    <a asp-action="Register" asp-controller="FoodCategory" title="Cadastrar categoria">
-        <i class="material-icons">add</i>
+        <i class="material-icons">fastfood</i>
     </a>
 }

@@ -38,7 +38,7 @@ namespace Cine.Backoffice.Controllers
                 var seats = await _appSession.ListAvaliableSeats(item.Id);
                 item.AvaliableSeatCount = seats.Count();
             }
-            return View(model);
+            return View(model); 
         }
         public async Task<IActionResult> OrderList(OrderListModel model)
         {
@@ -112,11 +112,15 @@ namespace Cine.Backoffice.Controllers
 
             return RedirectToAction("Checkout", "Order", new { id = orderId, productName = string.Empty });
         }
-        [HttpPost]
-        //public async Task<IActionResult> Delete(CheckoutModel model)
-        public IActionResult Delete(CheckoutModel model)
+        public async Task<IActionResult> Delete(int id)
         {
-            //await _appOrder.Delete(model.Order);        
+            var orderDelete = await _appOrder.GetCheckoutAsync(id);
+            return View(orderDelete);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(CheckoutModel model)
+        {
+            await _appOrder.Delete(model.Order);        
             return RedirectToAction("Index","Order",null);
         }
         public async Task<IActionResult> OrderListFinished(OrderListModel model)

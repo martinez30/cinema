@@ -22,6 +22,15 @@ namespace Application.Models
         {
             Id = order.Id;
             Order = new OrderModel(order);
+            foreach (var item in order.OrderItems)
+            {
+                if(item.Product.Category == ProductCategory.Ticket)
+                {
+                    var data = item.Product.Name.Split('-');
+                    ProductName = data[0] + data[1];
+                    break;
+                }
+            }
         }
 
         public void AddFoods(IEnumerable<Food> foods)

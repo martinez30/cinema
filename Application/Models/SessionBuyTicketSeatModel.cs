@@ -9,6 +9,7 @@ namespace Application.Models
         public int Id { get; set; }
         public string Description { get; set; }
         public bool Selected { get; set; }
+        public bool Avaliable { get; set; }
 
         public SessionBuyTicketSeatModel()
         {
@@ -19,6 +20,7 @@ namespace Application.Models
         {
             Id = seat.Id;
             Description = $"{seat.Row} {seat.Column}";
+            Avaliable = seat.Avaliable;
         }
 
     }

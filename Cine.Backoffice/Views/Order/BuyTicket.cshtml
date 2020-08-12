@@ -14,7 +14,7 @@
             <span class="form-control">@Model.MovieName</span>
         </div>
         <div class="form-group col-md-6">
-            <label asp-for="Date" class="control-label"> Qual a data e hora da sessão</label>
+            <label asp-for="Date" class="control-label"> Sessão</label>
             <span class="form-control">@Model.Date</span>
         </div>
     </div>
@@ -22,19 +22,45 @@
     <div class="row">
         @for (int i = 0; i < Model.Seats.Count; i++)
         {
-        <div class="col-md-1">
-            <label class="form-control text-center">@Model.Seats[i].Description</label>
-            <input type="hidden" asp-for="@Model.Seats[i].Id"/>
-            <input type="hidden" asp-for="@Model.Seats[i].Description"/>
-            <label class="switch">
-                <input type="checkbox" asp-for="@Model.Seats[i].Selected" />
-                <i class="material-icons">event_seat</i>
-            </label>
-        </div>
+            <div style="width: 8%">
+                <input type="hidden" asp-for="@Model.Seats[i].Id" />
+                <input type="hidden" asp-for="@Model.Seats[i].Description" />
+                <label class="form-control text-center">@Model.Seats[i].Description</label>
+                <label>
+                    @if (Model.Seats[i].Avaliable == false)
+                    {
+                        <a style="padding: 10px 10px; margin-left:15%">
+                            <i style="margin: 0; font-size: 280%" class="material-icons text-danger">event_seat</i>
+                        </a>
+                    }
+                    else
+                    {
+                        <a style="padding: 10px 10px; margin-left:15%">
+                            <input type="checkbox" hidden asp-for="@Model.Seats[i].Selected" />
+                            <i  style="margin: 0; font-size: 280%" class="material-icons avaliable-icon text-success">event_seat</i>
+                        </a>
+                    }
+                </label>
+            </div>
         }
     </div>
     <div class="form-group ">
         <input type="submit" value="Avançar" class="btn btn-info" />
-        <a asp-action="SessionList" asp-controller="Order" class="btn btn-secondary">Voltar</a>
+        <a asp-action="Index" asp-controller="Order" class="btn btn-secondary">Voltar</a>
     </div>
 </form>
+
+@section Scripts
+{
+    <script type="text/javascript">
+
+        $(function () {
+            $(".avaliable-icon").click(function () {
+                $(this).toggleClass("text-warning");
+            })
+            if ($('.avaliable-icon .text-warning')) {
+
+            }
+        })
+    </script>
+}

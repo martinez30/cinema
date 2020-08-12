@@ -12,7 +12,6 @@ namespace Application.Models
     public class SessionBuyTicketModel
     {
         public int Id { get; set; }
-
         public string MovieName { get; set; }
         public string Date { get; set; }
         public List<SessionBuyTicketSeatModel> Seats { get; set; }
@@ -27,7 +26,7 @@ namespace Application.Models
             Id = session.Id;
             MovieName = session.Movie.Name;
             Date = session.Date.ToString("dd/MM/yyyy HH:mm");
-            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x)).OrderBy(x=> x.Description).ToList();
+            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x)).OrderBy(x => x.Description).ToList();
         }
     }
 }

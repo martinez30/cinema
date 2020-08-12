@@ -17,26 +17,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input type="hidden" asp-for="Id" />
-                <label asp-for="Order.OrderItems" class="control-label"> Filme</label>
-                <span class="form-control">@Model</span>
-                <span asp-validation-for="Order.OrderItems" class="text-danger"></span>
+                <label asp-for="@Model.ProductName" class="control-label"> Filme</label>
+                <span class="form-control">@Model.ProductName</span>
                 <label asp-for="Order" class="control-label"> Sessão</label>
                 <span class="form-control">@Model.Order.ClientName</span>
                 <span asp-validation-for="Order" class="text-danger"></span>
-                @*@foreach (var item in Model.OrderItems)
-                {
-                    if (item != null)
-                    {
-                        <label asp-for="OrderItems" class="control-label"> Poltrona</label>
-                        <span class="form-control">@item.Description2</span>
-                    }
-                    else
-                    {
-                        <label asp-for="OrderItems" class="control-label"> Produto</label>
-                        <span class="form-control">@item.ProductName @item.Description1 @item.Description2</span>
-                    }
-                    <span asp-validation-for="OrderItems" class="text-danger"></span>
-                }*@
 
             </div>
             
