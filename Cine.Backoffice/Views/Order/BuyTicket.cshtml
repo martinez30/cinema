@@ -6,61 +6,126 @@
 <form asp-action="BuyTicket" autocomplete="off" method="post">
     <div class="row">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <input type="hidden" asp-for="Id" />
             <input type="hidden" asp-for="MovieName" />
             <input type="hidden" asp-for="Date" />
             <label asp-for="MovieName" class="control-label"> Filme</label>
             <span class="form-control">@Model.MovieName</span>
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
             <label asp-for="Date" class="control-label"> Sessão</label>
             <span class="form-control">@Model.Date</span>
         </div>
     </div>
-    <h3 class="form-control"><b>Poltronas Disponíveis</b></h3>
-    <div class="row">
-        @for (int i = 0; i < Model.Seats.Count; i++)
-        {
-            <div style="width: 8%">
-                <input type="hidden" asp-for="@Model.Seats[i].Id" />
-                <input type="hidden" asp-for="@Model.Seats[i].Description" />
-                <label class="form-control text-center">@Model.Seats[i].Description</label>
-                <label>
-                    @if (Model.Seats[i].Avaliable == false)
-                    {
-                        <a style="padding: 10px 10px; margin-left:15%">
-                            <i style="margin: 0; font-size: 280%" class="material-icons text-danger">event_seat</i>
-                        </a>
-                    }
-                    else
-                    {
-                        <a style="padding: 10px 10px; margin-left:15%">
-                            <input type="checkbox" hidden asp-for="@Model.Seats[i].Selected" />
-                            <i  style="margin: 0; font-size: 280%" class="material-icons avaliable-icon text-success">event_seat</i>
-                        </a>
-                    }
-                </label>
+    <div>
+        <div class="row">
+            <div class="col-md-3">
+                <button class="badge badge-pill badge-success"> </button>
+                <h6 class="d-inline"> Disponíveis</h6>
             </div>
-        }
-    </div>
-    <div class="form-group ">
-        <input type="submit" value="Avançar" class="btn btn-info" />
-        <a asp-action="Index" asp-controller="Order" class="btn btn-secondary">Voltar</a>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                <button class="badge badge-pill badge-warning"> </button>
+                <h6 class="d-inline">Selecionadas</h6>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-3">
+                <button class="badge badge-pill badge-danger"> </button>
+                <h6 class="d-inline">Indisponíveis</h6>
+            </div>
+        </div>
+        <h3 class="form-control"><b>Poltronas Disponíveis</b></h3>
+        <div class="row">
+            <table id="room">
+                <tbody>
+                    @{
+                        int x = 0;
+                    }
+
+                    @for (int i = 0; i < Model.Columns; i++)
+                    {
+                        <tr>
+                            @for (var j = 0; j < Model.Rows; j++, x++)
+                            {
+                                <th><input class="input-hidden" type="hidden" asp-for="Seats[x].Id" /></th>
+                                <th><input class="input-hidden" type="hidden" asp-for="Seats[x].Description" /></th>
+                                <td class="form-control text-center">
+                                <label class="d-block">@Model.Seats[x].Description</label>
+                                </td>
+                                <td>
+                                <label class="d-block">
+                                    @if (Model.Seats[x].Avaliable == false)
+                                    {
+                                        <a>
+                                            <i style="font-size: 200%" class="material-icons text-danger">event_seat</i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a>
+                                            <input type="checkbox" hidden asp-for="@Model.Seats[x].Selected" />
+                                            <i style="font-size: 200%" class="material-icons avaliable-icon text-success">event_seat</i>
+                                        </a>
+                                    }
+                                </label>
+                                </td>
+                            }
+                        </tr>
+
+                    }
+                <tfooter>
+                    <tr id="tela" class="d-block btn-dark text-center m-5">
+                        Tela
+                    </tr>
+                </tfooter>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group" style="margin: 4% 0 0 3%">
+            <input type="submit" value="Avançar" class="btn btn-info d-block text-center" />
+            <a style="margin-top: 10px" asp-action="Index" asp-controller="Order" class="btn btn-secondary d-block">Voltar</a>
+        </div>
     </div>
 </form>
 
 @section Scripts
 {
+
+    <style>
+        #tela:hover {
+            background-color: #343A40;
+        }
+
+        .row .badge {
+            height: 0.9rem;
+            border: none;
+            margin-top: 2px
+        }
+
+        #room {
+            background-color: black;
+            width: 70%;
+            margin: 3rem 0 0 3rem;
+            padding: 2% 5%
+        }
+
+        .input-hidden{
+            margin: 0;
+            padding: 0;
+        }
+
+        .avaliable-icon {
+            cursor: pointer;
+        }
+    </style>
     <script type="text/javascript">
 
         $(function () {
             $(".avaliable-icon").click(function () {
                 $(this).toggleClass("text-warning");
             })
-            if ($('.avaliable-icon .text-warning')) {
-
-            }
         })
     </script>
 }

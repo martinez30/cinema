@@ -17,11 +17,13 @@ namespace Cine.Backoffice.Controllers
         private readonly SessionApplication _appSession;
         private readonly OrderApplication _appOrder;
         private readonly FoodApplication _appFood;
-        public OrderController(SessionApplication appSession, OrderApplication appOrder, FoodApplication appFood)
+        private readonly MovieApplication _appMovie;
+        public OrderController(SessionApplication appSession, OrderApplication appOrder, FoodApplication appFood, MovieApplication appMovie)
         {
             _appSession = appSession;
             _appOrder = appOrder;
             _appFood = appFood;
+            _appMovie = appMovie;
         }
         public async Task<IActionResult> Index(SessionListModel model)
         {
@@ -75,7 +77,7 @@ namespace Cine.Backoffice.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View();
+                    return View(model);
                 }
                 var orderid = await _appOrder.Create(model);
                 return RedirectToAction("Checkout", "Order", new { id = orderid });

@@ -9,7 +9,7 @@ namespace Domain
         [Description("Finalizado")]
         Closed = 2,
         [Description("Cancelado")]
-        Canceled = 2
+        Canceled = 3
 
 
     }

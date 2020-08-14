@@ -17,7 +17,7 @@ namespace Application.Models
 
         [Required(ErrorMessage = Messages.RequiredField)]
         public int Column { get; set; }
-
+        public bool Avaliable { get; set; }
 
         public SeatModel()
         {
@@ -36,6 +36,7 @@ namespace Application.Models
             RoomId = seat.Room.Id;
             Row = seat.Row;
             Column = seat.Column;
+            Avaliable = false;
         }
     }
 }

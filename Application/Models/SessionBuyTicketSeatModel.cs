@@ -1,4 +1,6 @@
 ﻿using Domain;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Application.Models
 {
@@ -16,11 +18,21 @@ namespace Application.Models
 
         }
         
-        public SessionBuyTicketSeatModel(Seat seat)
+        public SessionBuyTicketSeatModel(Seat seat, IList<Ticket> tickets)
         {
+            string seatTicket;
             Id = seat.Id;
-            Description = $"{seat.Row} {seat.Column}";
-            Avaliable = seat.Avaliable;
+            Description = $"{seat.Row}{seat.Column}";
+            Avaliable = true;
+            foreach (var ticket in tickets)
+            {
+                seatTicket = ticket.Seat.Row + ticket.Seat.Column;
+                if (seatTicket == Description)
+                {
+                    Avaliable = false;
+                }
+            }
+
         }
 
     }

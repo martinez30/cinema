@@ -34,17 +34,13 @@ namespace Application
                     .FirstOrDefaultAsync(x => x.Id == model.Id);
 
                 var selectedSeats = model.Seats.Where(x => x.Selected).ToList();
-                foreach (var item in selectedSeats)
-                {
-                    item.Avaliable = false;
-                }
+                
                 var seats = await _context.Seats.Where(x => selectedSeats.Select(y => y.Id).Contains(x.Id)).ToListAsync();
 
                 var order = new Order(DateTime.Now);
 
                 foreach (var item in seats)
                 {
-
                     var ticket = new Ticket(session, item);
                     var orderitem = new OrderItem(order, ticket, 1, null, 20);
                     order.OrderItems.Add(orderitem);

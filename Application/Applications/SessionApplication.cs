@@ -59,7 +59,11 @@ namespace Application
 
             foreach (var item in session.Room.Seats)
             {
+                if (!tickets.Select(x => x.Seat.Id).Contains(item.Id))
+                {
                     model.Add(new SeatModel(item));
+                    model.Last(x => x.Avaliable = true);   
+                }
             }
             return model;
 
@@ -159,12 +163,12 @@ namespace Application
                 .ToListAsync();
 
             var seats = new List<Seat>();
-
-            foreach (var item in session.Room.Seats)
+            foreach (var seat in session.Room.Seats)
             {
-                seats.Add(item);
+                    seats.Add(seat);
             }
-            return new SessionBuyTicketModel(session, seats);
+            
+            return new SessionBuyTicketModel(session, seats, tickets);
         }
     }
 }

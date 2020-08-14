@@ -10,7 +10,6 @@ namespace Domain
         public Room Room { get; set; }
         public string Row { get; set; }
         public int Column { get; set; }
-        public bool Avaliable { get; set; }
 
         protected Seat()
         {
@@ -22,7 +21,6 @@ namespace Domain
             Room = room;
             Row = row;
             Column = column;
-            Avaliable = true;
         }
     }
 }

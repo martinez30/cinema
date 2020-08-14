@@ -15,18 +15,32 @@ namespace Application.Models
         public string MovieName { get; set; }
         public string Date { get; set; }
         public List<SessionBuyTicketSeatModel> Seats { get; set; }
+        public int? Rows { get; set; }
+        public int? Columns{ get; set; }
 
         public SessionBuyTicketModel()
         {
                 
         }
 
+        public SessionBuyTicketModel(Session session, IList<Seat> seats, IList<Ticket> tickets)
+        {
+            var a = seats.Select(x=> x.Row);
+            a = a.Distinct();
+            Rows = a.Count();
+            var b = seats.Select(x => x.Column);
+            b = b.Distinct();
+            Columns = b.Count();
+            Id = session.Id;
+            MovieName = session.Movie.Name;
+            Date = session.Date.ToString("dd/MM/yyyy HH:mm");
+            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x, tickets)).OrderByDescending(x => x.Description).ToList();
+        }
         public SessionBuyTicketModel(Session session, IList<Seat> seats)
         {
             Id = session.Id;
             MovieName = session.Movie.Name;
             Date = session.Date.ToString("dd/MM/yyyy HH:mm");
-            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x)).OrderBy(x => x.Description).ToList();
         }
     }
 }

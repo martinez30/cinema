@@ -145,9 +145,11 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <a class="col-md-5 btn btn-success" asp-action="Finalization" asp-route-id="@Model.Id">Finalizar</a>
+                        <a class="col-md-3 btn btn-success" asp-action="Finalization" asp-route-id="@Model.Id">Finalizar</a>
                         <span class="col-md-1"></span>
-                        <a class="col-md-5 btn btn-warning" asp-action="Delete" asp-route-id="@Model.Id">Cancelar</a>
+                        <a class="col-md-3 btn btn-secondary" asp-action="BuyTicket" asp-route-id="@Model.Id">Voltar</a>
+                        <span class="col-md-1"></span>
+                        <a class="col-md-3 btn btn-warning" asp-action="Delete" asp-route-id="@Model.Id">Cancelar</a>
                     </div>
                 </div>
             </div>

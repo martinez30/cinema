@@ -21,7 +21,7 @@ namespace Application.Models
         
         [Required(ErrorMessage = Messages.RequiredField)] 
         public int? SeatColumnCount { get; set; }
-        public int SeatsCount { get; set; }
+        public int? SeatsCount { get; set; }
 
         public RoomModel()
         {
