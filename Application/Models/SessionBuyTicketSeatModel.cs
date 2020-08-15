@@ -9,9 +9,11 @@ namespace Application.Models
 
 
         public int Id { get; set; }
-        public string Description { get; set; }
+        public string Row { get; set; }
+        public int Column { get; set; }
         public bool Selected { get; set; }
         public bool Avaliable { get; set; }
+        public string Description { get; set; }
 
         public SessionBuyTicketSeatModel()
         {
@@ -22,12 +24,14 @@ namespace Application.Models
         {
             string seatTicket;
             Id = seat.Id;
-            Description = $"{seat.Row}{seat.Column}";
+            Row = seat.Row;
+            Column = seat.Column;
+            Description = Row + Column;
             Avaliable = true;
             foreach (var ticket in tickets)
             {
                 seatTicket = ticket.Seat.Row + ticket.Seat.Column;
-                if (seatTicket == Description)
+                if (seatTicket == Row + Column)
                 {
                     Avaliable = false;
                 }

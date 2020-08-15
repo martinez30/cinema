@@ -43,15 +43,15 @@
                         int x = 0;
                     }
 
-                    @for (int i = 0; i < Model.Columns; i++)
+                    @for (int i = 0; i < Model.Rows; i++)
                     {
                         <tr>
-                            @for (var j = 0; j < Model.Rows; j++, x++)
+                            @for (var j = 0; j < Model.Columns; j++, x++)
                             {
                                 <th><input class="input-hidden" type="hidden" asp-for="Seats[x].Id" /></th>
                                 <th><input class="input-hidden" type="hidden" asp-for="Seats[x].Description" /></th>
                                 <td class="form-control text-center">
-                                <label class="d-block">@Model.Seats[x].Description</label>
+                                    <label class="d-block">@Model.Seats[x].Description </label>
                                 </td>
                                 <td>
                                 <label class="d-block">
@@ -75,7 +75,7 @@
 
                     }
                 <tfooter>
-                    <tr id="tela" class="d-block btn-dark text-center m-5">
+                    <tr id="tela" class="d-block btn-dark text-center">
                         Tela
                     </tr>
                 </tfooter>
@@ -83,9 +83,9 @@
             </table>
         </div>
 
-        <div class="form-group" style="margin: 4% 0 0 3%">
+        <div class="form-group botoes">
             <input type="submit" value="Avançar" class="btn btn-info d-block text-center" />
-            <a style="margin-top: 10px" asp-action="Index" asp-controller="Order" class="btn btn-secondary d-block">Voltar</a>
+            <a asp-action="Index" asp-controller="Order" class="btn btn-secondary d-block">Voltar</a>
         </div>
     </div>
 </form>
@@ -96,6 +96,14 @@
     <style>
         #tela:hover {
             background-color: #343A40;
+        }
+
+        div .botoes {
+            margin: 4% 0 0 3%
+        }
+
+        .botoes a {
+            margin-top: 10px
         }
 
         .row .badge {

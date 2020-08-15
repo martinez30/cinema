@@ -34,7 +34,7 @@ namespace Application.Models
             Id = session.Id;
             MovieName = session.Movie.Name;
             Date = session.Date.ToString("dd/MM/yyyy HH:mm");
-            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x, tickets)).OrderByDescending(x => x.Description).ToList();
+            Seats = seats.Select(x => new SessionBuyTicketSeatModel(x, tickets)).OrderByDescending(x => x.Row).ThenByDescending(x => x.Column).ToList();
         }
         public SessionBuyTicketModel(Session session, IList<Seat> seats)
         {
