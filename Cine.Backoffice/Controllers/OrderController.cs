@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Application;
@@ -80,7 +81,7 @@ namespace Cine.Backoffice.Controllers
                     return View(model);
                 }
                 var orderid = await _appOrder.Create(model);
-                return RedirectToAction("Checkout", "Order", new { id = orderid });
+                return RedirectToAction("Checkout", "Order", new { id = orderid, idSession = model.Id });
             }
             catch (Exception e)
             {
@@ -89,9 +90,9 @@ namespace Cine.Backoffice.Controllers
                 return View(model);
             }
         }
-        public async Task<IActionResult> Checkout(int id, string productName)
+        public async Task<IActionResult> Checkout(int id,int? idSession, string productName)
         {
-            var model = await _appOrder.Checkout(id, productName);
+            var model = await _appOrder.Checkout(id, idSession, productName);
 
             return View(model);
         }
@@ -118,6 +119,12 @@ namespace Cine.Backoffice.Controllers
         {
             var orderDelete = await _appOrder.GetCheckoutAsync(id);
             return View(orderDelete);
+        }
+        public async Task<IActionResult> Cancel (int id)
+        {
+            var order = await _appOrder.GetCheckoutAsync(id);
+            await _appOrder.DeleteCheckout(order);
+            return RedirectToAction("BuyTicket",new { id = order });
         }
         [HttpPost]
         public async Task<IActionResult> Delete(CheckoutModel model)

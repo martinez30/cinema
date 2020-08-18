@@ -26,7 +26,6 @@ namespace Application.Models
         public bool DescontAllowed { get; set; }
         public string MovieName { get; set; }
         public string RoomName { get; set; }
-
         public int AvaliableSeatCount { get; set; }
 
 

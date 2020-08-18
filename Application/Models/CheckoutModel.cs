@@ -11,6 +11,7 @@ namespace Application.Models
         public OrderModel Order { get; set; }
         public IEnumerable<CheckoutFoodModel> Foods { get; set; }
         public string ProductName { get; set; }
+        public int? IdSession { get; set; }
 
 
         public CheckoutModel()
@@ -18,9 +19,10 @@ namespace Application.Models
 
         }
 
-        public CheckoutModel(Order order)
+        public CheckoutModel(Order order, int? idSession)
         {
             Id = order.Id;
+            IdSession = idSession;
             Order = new OrderModel(order);
             foreach (var item in order.OrderItems)
             {
