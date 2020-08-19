@@ -26,7 +26,7 @@
             </div>
             <div class="col-md-1"></div>
             <div class="col-md-3">
-                <button class="badge badge-pill badge-warning"> </button>
+                <button class="badge badge-pill" id="warning"> </button>
                 <h6 class="d-inline">Selecionadas</h6>
             </div>
             <div class="col-md-1"></div>
@@ -37,7 +37,7 @@
         </div>
         <h3 class="form-control"><b>Poltronas Disponíveis</b></h3>
         <div class="row">
-            <table id="room">
+            <table class="room">
                 <tbody>
                     @{
                         int x = 0;
@@ -54,31 +54,25 @@
                                     <label class="d-block">@Model.Seats[x].Description </label>
                                 </td>
                                 <td>
-                                <label class="d-block">
-                                    @if (Model.Seats[x].Avaliable == false)
-                                    {
-                                        <a>
-                                            <i style="font-size: 200%" class="material-icons text-danger">event_seat</i>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a>
-                                            <input type="checkbox" hidden asp-for="@Model.Seats[x].Selected" />
-                                            <i style="font-size: 200%" class="material-icons avaliable-icon text-success">event_seat</i>
-                                        </a>
-                                    }
-                                </label>
+                                    <label class="d-block">
+                                        @if (Model.Seats[x].Avaliable == false)
+                                        {
+                                            <a>
+                                                <i style="font-size: 200%" class="material-icons text-danger">event_seat</i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a>
+                                                <input type="checkbox" hidden asp-for="@Model.Seats[x].Selected" />
+                                                <i style="font-size: 200%" class="material-icons avaliable-icon text-success">event_seat</i>
+                                            </a>
+                                        }
+                                    </label>
                                 </td>
                             }
                         </tr>
-
                     }
-                <tfooter>
-                    <tr id="tela" class="d-block btn-dark text-center">
-                        Tela
-                    </tr>
-                </tfooter>
                 </tbody>
             </table>
         </div>
@@ -94,8 +88,14 @@
 {
 
     <style>
+        #tela {
+            color: black;
+            background-color: gray;
+        }
+
         #tela:hover {
-            background-color: #343A40;
+            background-color: gray;
+            color: black;
         }
 
         div .botoes {
@@ -112,14 +112,17 @@
             margin-top: 2px
         }
 
-        #room {
-            background-color: black;
-            width: 70%;
-            margin: 3rem 0 0 3rem;
-            padding: 2% 5%
+        #warning {
+            background-color: #F5700C;
         }
 
-        .input-hidden{
+        .room {
+            background-color: black;
+            width: 80%;
+            margin: auto;
+        }
+
+        .input-hidden {
             margin: 0;
             padding: 0;
         }

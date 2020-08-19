@@ -120,12 +120,6 @@ namespace Cine.Backoffice.Controllers
             var orderDelete = await _appOrder.GetCheckoutAsync(id);
             return View(orderDelete);
         }
-        public async Task<IActionResult> Cancel (int id)
-        {
-            var order = await _appOrder.GetCheckoutAsync(id);
-            await _appOrder.DeleteCheckout(order);
-            return RedirectToAction("BuyTicket",new { id = order });
-        }
         [HttpPost]
         public async Task<IActionResult> Delete(CheckoutModel model)
         {

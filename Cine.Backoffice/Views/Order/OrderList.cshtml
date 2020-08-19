@@ -3,13 +3,13 @@
     ViewData["Title"] = "Pedidos";
 }
 <style>
-    select.form-control:not([size]):not([multiple]){
+    select.form-control:not([size]):not([multiple]) {
         height: 2.3rem;
     }
 </style>
 <form asp-action="OrderList" id="form" method="get" autocomplete="off">
     <div class="row">
-         
+
         <div class="form-group col-md-5">
             <input type="hidden" asp-for="IsSearch" value="true" />
             <label asp-for="@Model.OrderDate" class="control-label">Filme</label>
@@ -19,7 +19,7 @@
         <div class="form-group">
             <label asp-for="@Model.Status" class="control-label"> Status </label>
             <select asp-for="@Model.Status" class="form-control dark-edition" style="color: black" asp-items="ViewBag.StatusSelectList">
-                <option value="" >Selecione</option>
+                <option value="">Selecione</option>
             </select>
             <span asp-validation-for="@Model.Status" class="text-danger"></span>
         </div>
@@ -69,27 +69,30 @@
                                                 <td><h4>@item.StatusName</h4></td>
                                                 <td><h4>@item.OrderItems.Count()</h4></td>
                                                 <td>
-                                                    <div class="row ">
-                                                        <a class="nav-link col-md-3 " asp-action="Checkout" asp-route-id="@item.Id " title="Finalizar pedido">
-                                                            <i class="material-icons">done</i>
-                                                        </a>
-                                                        <a class="nav-link col-md-3 " asp-action="Delete" asp-route-id="@item.Id " title="Cancelamnto de pedido">
-                                                            <i class="material-icons">delete</i>
-                                                        </a>
-                                                        <a class="nav-link col-md-3 " title="Tempo de expiração">
-                                                            <i class="material-icons">watch_later</i>
-                                                        </a>
-                                                    </div>
+                                                    @if (item.StatusName == "Em aberto")
+                                                    {
+                                                        <div class="row ">
+                                                            <a class="nav-link col-md-3 " asp-action="Checkout" asp-route-id="@item.Id" title="Finalizar pedido">
+                                                                <i class="material-icons">done</i>
+                                                            </a>
+                                                            <a class="nav-link col-md-3 " @*asp-action="Delete" asp-route-id="@item.Id "*@ href="#" title="Cancelamnto de pedido">
+                                                                <i class="material-icons">delete</i>
+                                                            </a>
+                                                            <a class="nav-link col-md-3 " title="Tempo de expiração">
+                                                                <i class="material-icons">watch_later</i>
+                                                            </a>
+                                                        </div>
+                                                    }
                                                 </td>
                                             </tr>
                                         }
                                     }
                                     else
                                     {
-                                    <tr>
-                                        <td colspan="2"> Nenhum dado encontrado </td>
+                                        <tr>
+                                            <td colspan="2"> Nenhum dado encontrado </td>
 
-                                    </tr>
+                                        </tr>
                                     }
                                 </tbody>
                             </table>

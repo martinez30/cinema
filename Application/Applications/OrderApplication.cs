@@ -3,10 +3,7 @@ using Domain;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application
@@ -116,7 +113,7 @@ namespace Application
 
             return new CheckoutModel(checkout);
         }
-        public async Task<CheckoutModel> Checkout(int id, string productName)
+        public async Task<CheckoutModel> Checkout(int id, int? idSession, string productName)
         {
             var order = await _context.Orders
                 .Include(x => x.OrderItems)
@@ -189,6 +186,5 @@ namespace Application
 
             await _context.SaveChangesAsync();
         }
-
     }
 }

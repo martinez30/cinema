@@ -36,23 +36,6 @@ namespace Cine.Backoffice.Controllers
         [TempData]
         public string ErrorMessage { get; set; }
 
-
-        //[HttpGet]
-        //public IActionResult Index()
-        //{
-        //    var list = new List<ListViewModel>();
-        //    foreach (var user in _userManager.Users.Include(x => x.Person))
-        //    {
-        //        list.Add(new ListViewModel
-        //        {
-        //            Id = user.Id.ToString(),
-        //            Nome = $"{user.Person.FirstName} {user.Person.LastName}",
-        //            Email = user.Email
-        //        });
-        //    }
-        //    return View(list);
-        //}
-
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
@@ -83,14 +66,9 @@ namespace Cine.Backoffice.Controllers
 
                 if (result.Succeeded)
                 {
-
                     if (returnUrl != null)
                         return RedirectToLocal(returnUrl);
                     return RedirectToAction(nameof(HomeController.Index), "Home");
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
@@ -105,110 +83,6 @@ namespace Cine.Backoffice.Controllers
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginWith2fa(bool rememberMe, string returnUrl = null)
-        {
-            // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            var model = new LoginWith2faViewModel { RememberMe = rememberMe };
-            ViewData["ReturnUrl"] = returnUrl;
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginWith2fa(LoginWith2faViewModel model, bool rememberMe, string returnUrl = null)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
-            }
-
-            var authenticatorCode = model.TwoFactorCode.Replace(" ", string.Empty).Replace("-", string.Empty);
-
-            var result = await _signInManager.TwoFactorAuthenticatorSignInAsync(authenticatorCode, rememberMe, model.RememberMachine);
-
-            if (result.Succeeded)
-            {
-                return RedirectToLocal(returnUrl);
-            }
-            else if (result.IsLockedOut)
-            {
-                return RedirectToAction(nameof(Lockout));
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid authenticator code.");
-                return View();
-            }
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> LoginWithRecoveryCode(string returnUrl = null)
-        {
-            // Ensure the user has gone through the username & password screen first
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            ViewData["ReturnUrl"] = returnUrl;
-
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LoginWithRecoveryCode(LoginWithRecoveryCodeViewModel model, string returnUrl = null)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load two-factor authentication user.");
-            }
-
-            var recoveryCode = model.RecoveryCode.Replace(" ", string.Empty);
-
-            var result = await _signInManager.TwoFactorRecoveryCodeSignInAsync(recoveryCode);
-
-            if (result.Succeeded)
-            {
-                return RedirectToLocal(returnUrl);
-            }
-            if (result.IsLockedOut)
-            {
-                return RedirectToAction(nameof(Lockout));
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
-                return View();
-            }
         }
 
         [HttpGet]
@@ -338,112 +212,20 @@ namespace Cine.Backoffice.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string userId, string code)
-        {
-            if (userId == null || code == null)
-            {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
-            }
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new ApplicationException($"Unable to load user with ID '{userId}'.");
-            }
-            var result = await _userManager.ConfirmEmailAsync(user, code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
-
-            if (user == null)
-                return View(nameof(ForgotPasswordConfirmation), model);
-
-            //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-            //var callbackUrl = Url.ResetPasswordCallbackLink(code, Request.Scheme);
-            //await _emailSender.LostPasswordAsync(user.Email, user.Person.FirstName, $"{user.Person.FirstName} {user.Person.LastName}", callbackUrl);
-
-            return View(nameof(ForgotPasswordConfirmation), model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPasswordConfirmation(ForgotPasswordViewModel model)
-        {
-            return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            if (code == null)
-            {
-                throw new ApplicationException("A code must be supplied for password reset.");
-            }
-            var model = new ResetPasswordViewModel { Code = code };
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var dbuser = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == model.Email);
-            var user = await _userManager.FindByIdAsync(dbuser?.Id);
-
-            if (dbuser == null || user == null)
-            {
-                // Don't reveal that the user does not exist
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction(nameof(ResetPasswordConfirmation));
-            }
-            AddErrors(result);
-            return View(model);
-        }
-
-        [HttpGet]
-        [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {
             return View();
         }
-
 
         [HttpGet]
         [AllowAnonymous]
         public IActionResult RegisterPassword(string email = null, string code = null)
         {
             if (email == null)
-                throw new ApplicationException("An e-mail must be supplied for password registration.");
+                throw new ApplicationException("Um e-mail deve ser fornecido para efetivação do Cadastro.");
 
             if (code == null)
-                throw new ApplicationException("A code must be supplied for password registration.");
+                throw new ApplicationException("Uma senha deve ser fornecido para efetivação do Cadastro.");
 
             var model = new RegisterPasswordViewModel
             {
@@ -493,78 +275,6 @@ namespace Cine.Backoffice.Controllers
         }
 
         [HttpGet]
-        public IActionResult ChangePassword(string code = null)
-        {
-            return View(new ChangePasswordViewModel() { });
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction(nameof(Login));
-            }
-            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                ViewBag.Message = Messages.PasswordChanged;
-                ViewBag.Success = true;
-            }
-            AddErrors(result);
-            return View(model);
-        }
-
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> EditUser(string message = "", bool? success = null)
-        {
-            var model = new EditUserViewModel();
-
-            var applicationsUser = await _userManager.GetUserAsync(this.User);
-
-            if (applicationsUser != null)
-            {
-                var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Id == applicationsUser.Id);
-
-                model.Email = user.Email;
-            }
-
-            if (success.HasValue)
-            {
-                ViewBag.Message = message;
-                ViewBag.Success = success.Value;
-            }
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [RequestSizeLimit(10_485_760)]
-        [Authorize]
-        public async Task<IActionResult> EditUser(IFormCollection data)
-        {
-            var applicationsUser = await _userManager.GetUserAsync(this.User);
-            var user = _userManager.Users.FirstOrDefault(x => x.Id == applicationsUser.Id);
-
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return Json(new { message = Messages.DataChanged, success = true });
-            }
-            return Json(new { message = result.Errors.First().Description, success = false });
-
-        }
-
-        [HttpGet]
         [AllowAnonymous]
         public IActionResult AccessDenied()
         {
@@ -577,10 +287,6 @@ namespace Cine.Backoffice.Controllers
         {
             if (result.Errors.Any())
                 ModelState.AddModelError(string.Empty, result.Errors.First().Description);
-
-            //foreach (var error in result.Errors)
-            //{
-            //}
         }
 
         private IActionResult RedirectToLocal(string returnUrl)
