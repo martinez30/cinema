@@ -9,7 +9,7 @@ namespace Infra.Repository
     {
         public T CreateDbContext(string[] args)
         {
-            var basepath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}Cine.Backoffice",Path.DirectorySeparatorChar);
+            var basepath = Directory.GetCurrentDirectory() + string.Format("{0}..{0}Teste.Web",Path.DirectorySeparatorChar);
             Configuration.Build(basepath);
 
             return Create(Configuration.ConnectionString);
